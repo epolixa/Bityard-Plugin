@@ -66,22 +66,16 @@ public class WanderingTraderListener implements Listener {
         try
         {
             if (event.getEntityType() == EntityType.WANDERING_TRADER) {
-                this.bityard.log("Trader spawned with recipes:");
                 WanderingTrader wanderingTrader = (WanderingTrader) event.getEntity();
-
                 ArrayList<MerchantRecipe> newRecipes = new ArrayList<MerchantRecipe>(); // recipes to be added to merchant
                 ArrayList<Material> pickedMaterials = new ArrayList<Material>(); // materials already added
-
                 // Add at least one material from expensive items list first
                 Material expensiveMaterial = this.expensiveMaterials.get(random.nextInt(expensiveMaterials.size()));
                 pickedMaterials.add(expensiveMaterial);
                 newRecipes.add(buildRecipe(expensiveMaterial));
-                this.bityard.log(" - " + expensiveMaterial.toString());
-
                 for (int i = 0; i < NUM_OFFERS - 1; i++) {
                     // next selected random material
                     Material randomMaterial = Material.values()[random.nextInt(Material.values().length)];
-
                     // check if material is illegal or has been added
                     if (this.materialBlacklist.contains(randomMaterial) || pickedMaterials.contains(randomMaterial) || this.previousMaterials.contains(randomMaterial)) {
                         // skip and try again
@@ -90,16 +84,20 @@ public class WanderingTraderListener implements Listener {
                         // add recipe
                         pickedMaterials.add(randomMaterial);
                         newRecipes.add(buildRecipe(randomMaterial));
-                        this.bityard.log(" - " + randomMaterial.toString());
                     }
                 }
-
                 wanderingTrader.setRecipes(newRecipes);
                 this.previousMaterials = pickedMaterials;
+                // print wandering trader offers
+                bityard.log("Wandering Trader appeared at " + bityard.locationXYZ(wanderingTrader.getLocation()) + " with the following offers:");
+                for (MerchantRecipe offer : wanderingTrader.getRecipes()) {
+                    bityard.log("  - " + offer.getMaxUses() + " Offerings of " + offer.getResult().getAmount() + " " + offer.getResult().getType().name() + " for " + offer.getIngredients().get(0).getAmount() + " Emeralds");
+                }
             }
         }
         catch (Exception e)
         {
+            bityard.log("caught error: ");
             e.printStackTrace();
         }
     }
@@ -120,7 +118,7 @@ public class WanderingTraderListener implements Listener {
             sellItem.setAmount(inRange(this.MIN_AMOUNT, Math.min(sellItem.getMaxStackSize(), this.MAX_AMOUNT)));
         }
         recipe = new MerchantRecipe(sellItem, inRange(this.MIN_USES, this.expensiveMaterials.contains(material) ? this.MAX_USES / 2 : this.MAX_USES));
-        recipe.addIngredient(new ItemStack(Material.EMERALD, inRange(this.MIN_PRICE, this.expensiveMaterials.contains(material) ? this.MAX_PRICE + this.BONUS_PRICE : this.MAX_PRICE)));
+        recipe.addIngredient(new ItemStack(Material.EMERALD, inRange(this.MIN_PRICE, this.MAX_PRICE) + (this.expensiveMaterials.contains(material) ? this.BONUS_PRICE : 0)));
         return recipe;
     }
 
@@ -256,6 +254,7 @@ public class WanderingTraderListener implements Listener {
         expensiveMaterials.add(Material.CROSSBOW);
         expensiveMaterials.add(Material.SHIELD);
         expensiveMaterials.add(Material.ENCHANTED_BOOK);
+        expensiveMaterials.add(Material.SPECTRAL_ARROW);
 
         // BANNER PATTERNS
         expensiveMaterials.add(Material.MOJANG_BANNER_PATTERN);
@@ -269,6 +268,7 @@ public class WanderingTraderListener implements Listener {
         expensiveMaterials.add(Material.POTION);
         expensiveMaterials.add(Material.LINGERING_POTION);
         expensiveMaterials.add(Material.SPLASH_POTION);
+        expensiveMaterials.add(Material.TIPPED_ARROW);
 
         // SPAWN EGGS
         expensiveMaterials.add(Material.ZOMBIE_SPAWN_EGG);
@@ -326,6 +326,7 @@ public class WanderingTraderListener implements Listener {
         materialBlacklist.add(Material.END_PORTAL_FRAME);
         materialBlacklist.add(Material.FILLED_MAP);
         materialBlacklist.add(Material.FIRE);
+        materialBlacklist.add(Material.SOUL_FIRE);
         materialBlacklist.add(Material.FIREWORK_STAR);
         materialBlacklist.add(Material.FROSTED_ICE);
         materialBlacklist.add(Material.INFESTED_CHISELED_STONE_BRICKS);
@@ -351,6 +352,7 @@ public class WanderingTraderListener implements Listener {
         materialBlacklist.add(Material.WET_SPONGE);
         materialBlacklist.add(Material.TRIPWIRE);
         materialBlacklist.add(Material.WRITTEN_BOOK);
+        materialBlacklist.add(Material.SUSPICIOUS_STEW);
 
         // Too OP, valuable, rare, collectibles
         materialBlacklist.add(Material.BEACON);
@@ -538,8 +540,14 @@ public class WanderingTraderListener implements Listener {
         materialBlacklist.add(Material.POTTED_SPRUCE_SAPLING);
         materialBlacklist.add(Material.POTTED_WHITE_TULIP);
         materialBlacklist.add(Material.POTTED_WITHER_ROSE);
+        materialBlacklist.add(Material.POTTED_CRIMSON_FUNGUS);
+        materialBlacklist.add(Material.POTTED_CRIMSON_ROOTS);
+        materialBlacklist.add(Material.POTTED_WARPED_FUNGUS);
+        materialBlacklist.add(Material.POTTED_WARPED_ROOTS);
         materialBlacklist.add(Material.SWEET_BERRY_BUSH);
         materialBlacklist.add(Material.CARROTS);
+        materialBlacklist.add(Material.TWISTING_VINES_PLANT);
+        materialBlacklist.add(Material.WEEPING_VINES_PLANT);
 
         // Wall blocks
         materialBlacklist.add(Material.OAK_WALL_SIGN);
@@ -548,6 +556,8 @@ public class WanderingTraderListener implements Listener {
         materialBlacklist.add(Material.BIRCH_WALL_SIGN);
         materialBlacklist.add(Material.JUNGLE_WALL_SIGN);
         materialBlacklist.add(Material.DARK_OAK_WALL_SIGN);
+        materialBlacklist.add(Material.CRIMSON_WALL_SIGN);
+        materialBlacklist.add(Material.WARPED_WALL_SIGN);
         materialBlacklist.add(Material.BLACK_WALL_BANNER);
         materialBlacklist.add(Material.BLUE_WALL_BANNER);
         materialBlacklist.add(Material.BROWN_WALL_BANNER);
@@ -572,5 +582,6 @@ public class WanderingTraderListener implements Listener {
         materialBlacklist.add(Material.WITHER_SKELETON_WALL_SKULL);
         materialBlacklist.add(Material.WALL_TORCH);
         materialBlacklist.add(Material.REDSTONE_WALL_TORCH);
+        materialBlacklist.add(Material.SOUL_WALL_TORCH);
     }
 }

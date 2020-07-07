@@ -24,10 +24,17 @@ public class AFKCommandExecutor implements CommandExecutor
                 return false;
             }
 
-            String reason = "";
-            for (int i = 0; i < args.length; i++)
-                reason += (args[i] + (i >= reason.length() - 1 ? "" : " "));
-            afk.goAFK((Player)sender, reason);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < args.length; i++) {
+                if (args[i].length() > 0) {
+                    if (sb.toString().length() > 0) {
+                        sb.append(" ");
+                    }
+                    sb.append(args[i]);
+                }
+            }
+
+            afk.goAFK((Player)sender, sb.toString());
 
             return true;
         }

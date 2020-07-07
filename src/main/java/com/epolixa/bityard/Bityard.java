@@ -37,7 +37,7 @@ public class Bityard extends JavaPlugin
 
         // Register orphan event listeners
         PluginManager pluginManager = getServer().getPluginManager();
-        //pluginManager.registerEvents(new BeaconListener(this), this); // beacon titles
+        pluginManager.registerEvents(new BeaconListener(this), this); // beacon titles
         pluginManager.registerEvents(new ServerListPingListener(this), this); // change motd from town hall
         pluginManager.registerEvents(new ElytraListener(this), this); // elytra polish
         pluginManager.registerEvents(new WanderingTraderListener(this), this); // random wandering trader
@@ -98,15 +98,7 @@ public class Bityard extends JavaPlugin
 
                 StringBuilder sb = new StringBuilder();
                 DyeColor color = sign.getColor();
-                if (color != null) {
-                    if (color.name().equals("BLACK")) {
-                        sb.append(ChatColor.GRAY);
-                    } else {
-                        sb.append(colorMap.get(color));
-                    }
-                } else {
-                    sb.append(ChatColor.GRAY);
-                }
+                sb.append(color == null ? ChatColor.GRAY : colorMap.get(color));
 
                 StringBuilder lsb = new StringBuilder();
                 for (int i = 0; i < sign.getLines().length; i++) {
@@ -157,5 +149,9 @@ public class Bityard extends JavaPlugin
 
     public String getMOTD() {
         return motd;
+    }
+
+    public HashMap<DyeColor, ChatColor> getColorMap() {
+        return colorMap;
     }
 }
