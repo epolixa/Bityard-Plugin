@@ -1,0 +1,10 @@
+name: Bityard
+version: 2.0
+author: epolixa
+main: com.epolixa.bityard.Bityard
+api-version: 1.15
+website: bityard.epolixa.com
+commands:
+    afk:
+        description: Set yourself as AFK
+        usage: /afk [reason]
