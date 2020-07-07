@@ -1,0 +1,5 @@
+.idea/
+target/
+Bityard-Plugin.iml
+pom.xml
+src/test/
