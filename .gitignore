@@ -1,5 +1,9 @@
 .idea/
+*.iml
+*.ims
 target/
-Bityard-Plugin.iml
+jars/
+out/
+log/
 pom.xml
 src/test/
