@@ -42,6 +42,7 @@ public class Bityard extends JavaPlugin
         pluginManager.registerEvents(new ElytraListener(this), this); // elytra polish
         pluginManager.registerEvents(new WanderingTraderListener(this), this); // random wandering trader
         pluginManager.registerEvents(new GatewayListener(this), this); // relocate end gateway with dragon egg
+        pluginManager.registerEvents(new AttributeGearListener(this), this); // manage attribute items
 
         // Start child classes
         log("Starting child classes");
@@ -72,7 +73,7 @@ public class Bityard extends JavaPlugin
         return loc.getBlockX() + "x, " + loc.getBlockY() + "y, " + loc.getBlockZ() + "z";
     }
 
-    public String pickMOTD() {
+    private String pickMOTD() {
         FileConfiguration config =  getConfig();
 
         try {

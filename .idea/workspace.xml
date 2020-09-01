@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="Bityard-Plugin:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="75d660e6-271a-4ea2-9f5f-06ffbfef13fa" name="Default" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -53,7 +58,7 @@
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="452" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="453" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="1128" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="device.file.explorer" />
@@ -281,116 +286,29 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1165" y="562" width="1058" height="572" key="#Notifications/0.0.2560.1400/-1280.407.1280.984@0.0.2560.1400" timestamp="1594144574228" />
-    <state width="1254" height="400" key="GridCell.Tab.0.bottom" timestamp="1594153269376">
+    <state width="1245" height="399" key="GridCell.Tab.0.bottom" timestamp="1594241617144">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1254" height="400" key="GridCell.Tab.0.bottom/0.0.2560.1400/-1280.407.1280.984@0.0.2560.1400" timestamp="1594153269376" />
-    <state width="1254" height="400" key="GridCell.Tab.0.center" timestamp="1594153269376">
+    <state width="1245" height="399" key="GridCell.Tab.0.bottom/0.0.2560.1400/-1280.407.1280.984@0.0.2560.1400" timestamp="1594241617144" />
+    <state width="1245" height="399" key="GridCell.Tab.0.center" timestamp="1594241617144">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1254" height="400" key="GridCell.Tab.0.center/0.0.2560.1400/-1280.407.1280.984@0.0.2560.1400" timestamp="1594153269376" />
-    <state width="1254" height="400" key="GridCell.Tab.0.left" timestamp="1594153269376">
+    <state width="1245" height="399" key="GridCell.Tab.0.center/0.0.2560.1400/-1280.407.1280.984@0.0.2560.1400" timestamp="1594241617144" />
+    <state width="1245" height="399" key="GridCell.Tab.0.left" timestamp="1594241617144">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1254" height="400" key="GridCell.Tab.0.left/0.0.2560.1400/-1280.407.1280.984@0.0.2560.1400" timestamp="1594153269376" />
-    <state width="1254" height="400" key="GridCell.Tab.0.right" timestamp="1594153269376">
+    <state width="1245" height="399" key="GridCell.Tab.0.left/0.0.2560.1400/-1280.407.1280.984@0.0.2560.1400" timestamp="1594241617144" />
+    <state width="1245" height="399" key="GridCell.Tab.0.right" timestamp="1594241617144">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1254" height="400" key="GridCell.Tab.0.right/0.0.2560.1400/-1280.407.1280.984@0.0.2560.1400" timestamp="1594153269376" />
-    <state x="781" y="344" key="SettingsEditor" timestamp="1594142555419">
+    <state width="1245" height="399" key="GridCell.Tab.0.right/0.0.2560.1400/-1280.407.1280.984@0.0.2560.1400" timestamp="1594241617144" />
+    <state x="781" y="344" key="SettingsEditor" timestamp="1597412768134">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="781" y="344" key="SettingsEditor/0.0.2560.1400/-1280.407.1280.984@0.0.2560.1400" timestamp="1594142555419" />
-  </component>
-  <component name="antWorkspaceConfiguration">
-    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
-    <option name="FILTER_TARGETS" value="false" />
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ArtifactsStructureConfigurable.UI">
-        <settings>
-          <artifact-editor />
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="FacetStructureConfigurable.UI">
-        <settings>
-          <last-edited>No facets are configured</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="GlobalLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="JdkListConfigurable.UI">
-        <settings>
-          <last-edited>1.8</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ModuleStructureConfigurable.UI">
-        <settings>
-          <last-edited>Bityard-Plugin</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectJDKs.UI">
-        <settings>
-          <last-edited>1.8</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectLibrariesConfigurable.UI">
-        <settings>
-          <last-edited>Maven: com.google.code.gson:gson:2.8.0</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
+    <state x="781" y="344" key="SettingsEditor/0.0.2560.1400/-1280.407.1280.984@0.0.2560.1400" timestamp="1597412768134" />
+    <state x="943" y="319" width="672" height="678" key="search.everywhere.popup" timestamp="1598880952168">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="943" y="319" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400/-1280.407.1280.984@0.0.2560.1400" timestamp="1598880952168" />
   </component>
 </project>

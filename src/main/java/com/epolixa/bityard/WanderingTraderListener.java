@@ -353,6 +353,10 @@ public class WanderingTraderListener implements Listener {
         materialBlacklist.add(Material.TRIPWIRE);
         materialBlacklist.add(Material.WRITTEN_BOOK);
         materialBlacklist.add(Material.SUSPICIOUS_STEW);
+        materialBlacklist.add(Material.EMERALD);
+        materialBlacklist.add(Material.EMERALD_BLOCK);
+        materialBlacklist.add(Material.EMERALD_ORE);
+        materialBlacklist.add(Material.PLAYER_HEAD);
 
         // Too OP, valuable, rare, collectibles
         materialBlacklist.add(Material.BEACON);
@@ -378,9 +382,6 @@ public class WanderingTraderListener implements Listener {
         materialBlacklist.add(Material.DRAGON_HEAD);
         materialBlacklist.add(Material.WITHER_SKELETON_SKULL);
         materialBlacklist.add(Material.ELYTRA);
-        materialBlacklist.add(Material.EMERALD);
-        materialBlacklist.add(Material.EMERALD_BLOCK);
-        materialBlacklist.add(Material.EMERALD_ORE);
         materialBlacklist.add(Material.END_CRYSTAL);
         materialBlacklist.add(Material.HEART_OF_THE_SEA);
         materialBlacklist.add(Material.MUSIC_DISC_11);
@@ -397,7 +398,6 @@ public class WanderingTraderListener implements Listener {
         materialBlacklist.add(Material.MUSIC_DISC_WARD);
         materialBlacklist.add(Material.MUSIC_DISC_PIGSTEP);
         materialBlacklist.add(Material.NETHER_STAR);
-        materialBlacklist.add(Material.PLAYER_HEAD);
         materialBlacklist.add(Material.TOTEM_OF_UNDYING);
         materialBlacklist.add(Material.TURTLE_HELMET);
         materialBlacklist.add(Material.WITHER_ROSE);
