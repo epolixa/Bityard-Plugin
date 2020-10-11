@@ -43,6 +43,7 @@ public class Bityard extends JavaPlugin
         pluginManager.registerEvents(new WanderingTraderListener(this), this); // random wandering trader
         pluginManager.registerEvents(new GatewayListener(this), this); // relocate end gateway with dragon egg
         pluginManager.registerEvents(new AttributeGearListener(this), this); // manage attribute items
+        pluginManager.registerEvents(new BlueIceListener(this), this); // blue ice freezes water
 
         // Start child classes
         log("Starting child classes");
