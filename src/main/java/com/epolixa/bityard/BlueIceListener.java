@@ -1,9 +1,6 @@
 package com.epolixa.bityard;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Levelled;
@@ -62,7 +59,12 @@ public class BlueIceListener implements Listener
                     Levelled lv = (Levelled)bd;
                     if (lv.getLevel() == 0) {
                         b.setType(Material.ICE);
-                        l.getWorld().playSound(l, Sound.ITEM_SWEET_BERRIES_PICK_FROM_BUSH, SoundCategory.BLOCKS, 1f, 0.7f);
+                        World w = l.getWorld();
+                        w.playSound(l, Sound.ENTITY_TURTLE_EGG_BREAK, SoundCategory.BLOCKS, 0.1f, 0.7f);
+                        w.spawnParticle(Particle.WATER_BUBBLE, l.getX() + 0.5, l.getY() + 0.5, l.getZ() + 0.5, 4, 0.5, 0.5, 0.5);
+                        if (w.getBlockAt(l.getBlockX(), l.getBlockY() + 1, l.getBlockZ()).getType() == Material.AIR) {
+                            w.spawnParticle(Particle.WATER_SPLASH, l.getX() + 0.5, l.getY() + 1.1, l.getZ() + 0.5, 2, 0.25, 0.0, 0.25);
+                        }
                     }
                 }
             }

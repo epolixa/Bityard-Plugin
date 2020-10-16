@@ -50,6 +50,9 @@ public class GatewayListener implements Listener
 
                 w.playEffect(deLoc, Effect.END_GATEWAY_SPAWN, 0);
 
+                // grant advancement
+                Bukkit.dispatchCommand(bityard.getServer().getConsoleSender(), "advancement grant " + p.getDisplayName() + " only community:relocate_community_portal");
+
                 Location oegLoc = new Location(w, c.getInt("RETURN_GATEWAY_X"), c.getInt("RETURN_GATEWAY_Y"), c.getInt("RETURN_GATEWAY_Z"));
                 if (!bityard.locationXYZ(deLoc).equalsIgnoreCase(bityard.locationXYZ(oegLoc))) {
                     bityard.log("attempting to remove old Gateway...");

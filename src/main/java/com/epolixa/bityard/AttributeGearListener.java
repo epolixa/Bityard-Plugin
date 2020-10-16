@@ -1,5 +1,7 @@
 package com.epolixa.bityard;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -21,12 +23,14 @@ public class AttributeGearListener implements Listener {
 
     private final static Random random = new Random(System.currentTimeMillis());
 
-    private HashMap<Material, Double> baseAttackDamageMap;
+    private HashMap<Material, EquipmentSlot> equipmentSlotMap;
+    private HashMap<Material, Multimap<Attribute, AttributeModifier>> baseAttributeModifiersMap;
 
     public AttributeGearListener(Bityard bityard) {
         this.bityard = bityard;
 
-        buildBaseAttackDamageMap();
+        buildEquipmentSlotMap();
+        buildBaseAttributeModifiersMap();
     }
 
 
@@ -83,11 +87,8 @@ public class AttributeGearListener implements Listener {
                 // randomly pick a value for the attribute buff relative to base gear values
                 double attributeBuff = pickAttributeBuff(attribute);
 
-                // calculate the actual attribute value to apply to the item
-                double attributeValue = calculateAttributeValue(itemStack, attribute, attributeBuff);
-
                 // apply the values to the item
-                itemStack = applyAttributeToItem(itemStack, attribute, attributeValue);
+                itemStack = applyAttributeToItem(itemStack, attribute, attributeBuff);
 
                 // modify the item description/lore with updated attribute values
                 itemStack = updateItemLore(itemStack);
@@ -140,10 +141,13 @@ public class AttributeGearListener implements Listener {
             switch (random.nextInt(4)) {
                 case 1:
                     attribute = Attribute.GENERIC_MAX_HEALTH;
+                    break;
                 case 2:
                     attribute = Attribute.GENERIC_MOVEMENT_SPEED;
+                    break;
                 case 3:
                     attribute = Attribute.GENERIC_ATTACK_DAMAGE;
+                    break;
                 default:
                     attribute = Attribute.GENERIC_LUCK;
             }
@@ -161,7 +165,7 @@ public class AttributeGearListener implements Listener {
     private double pickAttributeBuff(Attribute attribute) {
         try {
             bityard.log("[pickAttributeBuff] picking buff value for " + attribute.name());
-            Double attributeBuff = 0.0;
+            double attributeBuff = 0.0;
             switch (attribute) {
                 case GENERIC_MOVEMENT_SPEED:
                     attributeBuff = random.nextDouble();
@@ -169,13 +173,13 @@ public class AttributeGearListener implements Listener {
                 case GENERIC_MAX_HEALTH:
                 case GENERIC_ATTACK_DAMAGE:
                 case GENERIC_LUCK:
-                    attributeBuff = (double)random.nextInt(3);
+                    attributeBuff = random.nextDouble() + 1.0;
                     break;
                 default:
                     attributeBuff = 0.0;
                     break;
             }
-            attributeBuff = (double)Math.round(attributeBuff * 10) / 10;
+            attributeBuff = (double)Math.floor(attributeBuff * 10) / 10;
             bityard.log("[pickAttributeBuff] picked buff value of +" + attributeBuff + " " + attribute.name());
             return attributeBuff;
         } catch (Exception e) {
@@ -186,32 +190,29 @@ public class AttributeGearListener implements Listener {
     }
 
 
-    // calculate the actual attribute values for the item
-    private double calculateAttributeValue(ItemStack itemStack, Attribute attribute, double attributeBuff) {
-        try {
-            bityard.log("[calculateAttributeValue] calculating value for +" + attributeBuff + " " + attribute.name() + " for " + itemStack.getType().name());
-            double attributeValue = attributeBuff;
-            if (attribute == Attribute.GENERIC_ATTACK_DAMAGE) {
-                attributeValue = attributeBuff + baseAttackDamageMap.get(itemStack.getType());
-            }
-            bityard.log("[calculateAttributeValue] calculated value of " + attributeValue + " " + attribute.name() + " for " + itemStack.getType().name());
-            return attributeValue;
-        } catch (Exception e) {
-            bityard.log("[calculateAttributeValue] caught error: " + e.toString());
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-
     // apply the values to the item
     private ItemStack applyAttributeToItem(ItemStack itemStack, Attribute attribute, double attributeValue) {
         try {
             bityard.log("[applyAttributesToItem] applying " + attributeValue + " " + attribute.name() + " to " + itemStack.getType().name());
             ItemMeta itemMeta = itemStack.getItemMeta();
-            AttributeModifier attributeModifier = new AttributeModifier(UUID.randomUUID(), attribute.getKey().toString(), attributeValue, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-            itemMeta.addAttributeModifier(attribute, attributeModifier);
+
+            // Get the base modifiers
+            Multimap<Attribute, AttributeModifier> baseModifiers = this.baseAttributeModifiersMap.get(itemStack.getType());
+
+            // Compare buffed modifier to existing modifiers and overwrite if applicable
+            /*Collection<AttributeModifier> baseModifier = baseModifiers.get(attribute);
+            if (baseModifier != null) {
+                attributeValue = baseModifier. + attributeValue;
+                baseModifiers.removeAll(attribute);
+            }*/
+            EquipmentSlot es = this.equipmentSlotMap.get(itemStack.getType());
+            AttributeModifier attributeModifier = new AttributeModifier(UUID.randomUUID(), attribute.getKey().toString(), attributeValue, AttributeModifier.Operation.ADD_NUMBER, es == null ? EquipmentSlot.HAND : es);
+            baseModifiers.put(attribute, attributeModifier);
+
+            // Set the attributes to the item
+            itemMeta.setAttributeModifiers(baseModifiers);
             itemStack.setItemMeta(itemMeta);
+
             bityard.log("[applyAttributesToItem] done");
         } catch (Exception e) {
             bityard.log("[applyAttributesToItem] caught error: " + e.toString());
@@ -221,12 +222,17 @@ public class AttributeGearListener implements Listener {
     }
 
 
-    // modify the item description/lore with updated attribute values
+    // modify the item description/lore to reflect buffed attribute values
     private ItemStack updateItemLore(ItemStack itemStack) {
         try {
             bityard.log("[updateItemLore] updating item lore");
 
             // first, decide if it is a weapon or armor, as they display tags differently
+            if (equipmentSlotMap.get(itemStack.getType()) == EquipmentSlot.HAND) {
+
+            } else {
+
+            }
 
         } catch (Exception e) {
             bityard.log("[updateItemLore] caught error: " + e.toString());
@@ -236,22 +242,47 @@ public class AttributeGearListener implements Listener {
     }
 
 
-    // only need this for attack damage, as gear do not have base max health, luck, or speed
-    public void buildBaseAttackDamageMap() {
+    public void buildEquipmentSlotMap() {
         try {
-            bityard.log("[buildBaseAttackDamageMap] building base attack damage map for each gear");
-            this.baseAttackDamageMap = new HashMap<Material, Double>();
-            baseAttackDamageMap.put(Material.WOODEN_SWORD, 4.0);
-            baseAttackDamageMap.put(Material.GOLDEN_SWORD, 4.0);
-            baseAttackDamageMap.put(Material.STONE_SWORD, 5.0);
-            baseAttackDamageMap.put(Material.IRON_SWORD, 6.0);
-            baseAttackDamageMap.put(Material.DIAMOND_SWORD, 7.0);
-            baseAttackDamageMap.put(Material.NETHERITE_SWORD, 8.0);
-            bityard.log("[buildBaseAttackDamageMap] done");
+            bityard.log("[buildEquipmentSlotMap] building equipment slot for each gear");
+            this.equipmentSlotMap = new HashMap<Material, EquipmentSlot>();
+            equipmentSlotMap.put(Material.STONE_SWORD,   EquipmentSlot.HAND);
+            equipmentSlotMap.put(Material.DIAMOND_SWORD, EquipmentSlot.HAND);
+            bityard.log("[buildEquipmentSlotMap] done");
         } catch (Exception e) {
-            bityard.log("[buildBaseAttackDamageMap] caught error: " + e.toString());
+            bityard.log("[buildEquipmentSlotMap] caught error: " + e.toString());
             e.printStackTrace();
         }
+    }
+
+
+    public void buildBaseAttributeModifiersMap() {
+        try {
+            bityard.log("[buildBaseAttributeModifiersMap] building base attack damage map for each gear");
+            this.baseAttributeModifiersMap = new HashMap<Material, Multimap<Attribute, AttributeModifier>>();
+            baseAttributeModifiersMap.put(Material.STONE_SWORD,   buildAttributeMap(equipmentSlotMap.get(Material.STONE_SWORD),   0.0, 0.0, 0.0, 5.0, 1.6, 0.0, 0.0, 0.0));
+            baseAttributeModifiersMap.put(Material.DIAMOND_SWORD, buildAttributeMap(equipmentSlotMap.get(Material.DIAMOND_SWORD), 0.0, 0.0, 0.0, 7.0, 1.6, 0.0, 0.0, 0.0));
+            bityard.log("[buildBaseAttributeModifiersMap] done");
+        } catch (Exception e) {
+            bityard.log("[buildBaseAttributeModifiersMap] caught error: " + e.toString());
+            e.printStackTrace();
+        }
+    }
+
+
+    public ListMultimap<Attribute, AttributeModifier> buildAttributeMap(EquipmentSlot es, double maxHealth, double knockbackResistance, double movementSpeed, double attackDamage, double attackSpeed, double armor, double armorToughness, double luck) {
+        try {
+            bityard.log("[buildAttributeMap] enter");
+            ListMultimap<Attribute, AttributeModifier> attributeMap = ArrayListMultimap.create();
+            if (attackDamage != 0.0) attributeMap.put(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), Attribute.GENERIC_ATTACK_DAMAGE.name(), attackDamage, AttributeModifier.Operation.ADD_NUMBER, es));
+            if (attackSpeed != 0.0)  attributeMap.put(Attribute.GENERIC_ATTACK_SPEED,  new AttributeModifier(UUID.randomUUID(), Attribute.GENERIC_ATTACK_SPEED.name(),  attackSpeed,  AttributeModifier.Operation.ADD_NUMBER, es));
+            bityard.log("[buildAttributeMap] done");
+            return attributeMap;
+        } catch (Exception e) {
+            bityard.log("[buildAttributeMap] caught error: " + e.toString());
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
